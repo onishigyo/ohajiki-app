@@ -65,7 +65,8 @@ pnpm preview       # ビルド結果のプレビュー
 
 ## デプロイ
 
-Cloudflare（Workers 静的アセット。`main` への push で自動、`dist/` を配信）。
+Cloudflare Workers 静的アセット。`main` への push で GitHub Actions
+（[deploy.yml](.github/workflows/deploy.yml)）が `wrangler deploy` する。
 手順は [docs/DEPLOY.md](docs/DEPLOY.md)。
 
 ## データとプライバシー
