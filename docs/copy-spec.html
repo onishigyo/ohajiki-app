@@ -1,0 +1,994 @@
+<title>おはじき 文言仕様</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap"
+  rel="stylesheet"
+/>
+
+<style>
+  :root {
+    --paper: #faf6f0;
+    --surface: #fffdfa;
+    --surface-sunk: #f3ede3;
+    --ink: #3f362e;
+    --ink-soft: #877a6b;
+    --ink-faint: #b0a495;
+    --hair: #e9ddce;
+    --accent: #d76f90;
+    --accent-soft: #f7e2e9;
+    --flag: #c0574a;
+    --flag-soft: #f6e0dc;
+    --good: #3f9e86;
+    --good-soft: #d8efe8;
+    --shadow: 0 1px 2px rgba(63, 54, 46, 0.05), 0 6px 20px rgba(63, 54, 46, 0.06);
+
+    --serif: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", sans-serif;
+    --sans: "Zen Kaku Gothic New", "Hiragino Sans", "Noto Sans JP", sans-serif;
+    --mono: "DM Mono", "SFMono-Regular", ui-monospace, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #201c19;
+      --surface: #2a2521;
+      --surface-sunk: #322c27;
+      --ink: #f0e7dc;
+      --ink-soft: #b6a897;
+      --ink-faint: #7c7062;
+      --hair: #3d362f;
+      --accent: #e98caa;
+      --accent-soft: #402c33;
+      --flag: #e2887c;
+      --flag-soft: #402a27;
+      --good: #6fc3ac;
+      --good-soft: #24352f;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 6px 20px rgba(0, 0, 0, 0.28);
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #201c19;
+    --surface: #2a2521;
+    --surface-sunk: #322c27;
+    --ink: #f0e7dc;
+    --ink-soft: #b6a897;
+    --ink-faint: #7c7062;
+    --hair: #3d362f;
+    --accent: #e98caa;
+    --accent-soft: #402c33;
+    --flag: #e2887c;
+    --flag-soft: #402a27;
+    --good: #6fc3ac;
+    --good-soft: #24352f;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 6px 20px rgba(0, 0, 0, 0.28);
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.7;
+    font-feature-settings: "palt" 1;
+  }
+  .wrap {
+    max-width: 940px;
+    margin: 0 auto;
+    padding: clamp(2rem, 5vw, 4.5rem) clamp(1.1rem, 4vw, 2.5rem) 6rem;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--serif);
+    text-wrap: balance;
+    line-height: 1.35;
+    margin: 0;
+  }
+  h1 {
+    font-size: clamp(1.8rem, 4.5vw, 2.6rem);
+    font-weight: 900;
+    letter-spacing: 0.01em;
+  }
+  h2 {
+    font-size: clamp(1.25rem, 3vw, 1.55rem);
+    font-weight: 700;
+    margin: 3.5rem 0 0.35rem;
+    padding-top: 1.6rem;
+    border-top: 1px solid var(--hair);
+  }
+  h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin: 2rem 0 0.6rem;
+  }
+  p {
+    margin: 0.7rem 0;
+    max-width: 68ch;
+  }
+  a {
+    color: var(--accent);
+  }
+  strong {
+    font-weight: 700;
+  }
+
+  .lede {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(1.02rem, 2.4vw, 1.18rem);
+    color: var(--ink-soft);
+    max-width: 60ch;
+    margin: 0.9rem 0 0;
+  }
+
+  .eyebrow {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 0.9rem;
+    font-family: var(--sans);
+  }
+
+  .status {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.4rem;
+    margin: 1.8rem 0 0;
+    padding: 0.9rem 1.15rem;
+    background: var(--surface);
+    border: 1px solid var(--hair);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    font-size: 0.9rem;
+  }
+  .status b {
+    font-family: var(--mono);
+    font-weight: 500;
+    color: var(--accent);
+  }
+  .status .flagnum {
+    color: var(--flag);
+  }
+  .status .goodnum {
+    color: var(--good);
+  }
+
+  /* code identifiers */
+  code {
+    font-family: var(--mono);
+    font-size: 0.86em;
+    background: var(--surface-sunk);
+    border: 1px solid var(--hair);
+    border-radius: 5px;
+    padding: 0.08em 0.38em;
+    color: var(--ink-soft);
+    white-space: nowrap;
+  }
+
+  /* literal UI strings — rendered in the app voice */
+  .s {
+    font-family: var(--serif);
+    font-weight: 500;
+    background: var(--accent-soft);
+    color: var(--ink);
+    border-radius: 6px;
+    padding: 0.06em 0.42em;
+    white-space: nowrap;
+  }
+  .s-old {
+    background: var(--flag-soft);
+    text-decoration: line-through;
+    text-decoration-color: var(--flag);
+    text-decoration-thickness: 1.5px;
+  }
+  .s-new {
+    background: var(--good-soft);
+  }
+
+  .callout {
+    background: var(--surface);
+    border: 1px solid var(--hair);
+    border-left: 4px solid var(--accent);
+    border-radius: 12px;
+    padding: 1.2rem 1.35rem;
+    margin: 1.1rem 0;
+    box-shadow: var(--shadow);
+  }
+  .callout h3 {
+    margin-top: 0;
+  }
+  .callout.decision {
+    border-left-color: var(--flag);
+  }
+  .opt {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.2rem 0.8rem;
+    margin: 0.55rem 0;
+  }
+  .opt .tag {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--ink-faint);
+    padding-top: 0.15rem;
+  }
+  .opt .rec {
+    color: var(--good);
+    font-weight: 700;
+  }
+
+  .table-scroll {
+    overflow-x: auto;
+    margin: 1rem 0 1.5rem;
+    border: 1px solid var(--hair);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 0.9rem;
+    background: var(--surface);
+  }
+  caption {
+    text-align: left;
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--ink);
+    padding: 0.9rem 1rem 0.2rem;
+    caption-side: top;
+  }
+  th,
+  td {
+    text-align: left;
+    padding: 0.68rem 0.9rem;
+    border-top: 1px solid var(--hair);
+    vertical-align: top;
+  }
+  thead th {
+    border-top: none;
+    background: var(--surface-sunk);
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    position: sticky;
+    top: 0;
+  }
+  tbody tr:hover {
+    background: var(--surface-sunk);
+  }
+  td.where {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+    white-space: nowrap;
+  }
+  td.why {
+    color: var(--ink-soft);
+  }
+
+  .pill {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    padding: 0.12em 0.6em;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  .pill.brk {
+    background: var(--flag-soft);
+    color: var(--flag);
+  }
+  .pill.ok {
+    background: var(--good-soft);
+    color: var(--good);
+  }
+
+  ul.tight {
+    margin: 0.6rem 0;
+    padding-left: 1.2rem;
+  }
+  ul.tight li {
+    margin: 0.3rem 0;
+  }
+
+  .dl {
+    display: grid;
+    grid-template-columns: minmax(8rem, max-content) 1fr;
+    gap: 0.1rem 1.4rem;
+    margin: 1rem 0;
+  }
+  .dl dt {
+    font-weight: 700;
+    padding: 0.5rem 0;
+    border-top: 1px solid var(--hair);
+  }
+  .dl dd {
+    margin: 0;
+    padding: 0.5rem 0;
+    border-top: 1px solid var(--hair);
+    color: var(--ink-soft);
+  }
+  .dl dt:first-of-type,
+  .dl dd:first-of-type {
+    border-top: none;
+  }
+
+  footer {
+    margin-top: 4rem;
+    padding-top: 1.4rem;
+    border-top: 1px solid var(--hair);
+    font-size: 0.82rem;
+    color: var(--ink-faint);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .wrap > * {
+      animation: rise 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    }
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+    }
+  }
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 3px;
+  }
+</style>
+
+<div class="wrap">
+  <p class="eyebrow">おはじき銀行 · 内部仕様</p>
+  <h1>おはじきアプリ 文言仕様</h1>
+  <p class="lede">
+    画面に出る言葉を1つずつ棚卸しして、ブレを潰し、あるべき文言に揃えるための基準。 実装（<code
+      >index.html</code
+    >
+    / <code>src/main.ts</code>）と突き合わせて使う。
+  </p>
+
+  <div class="status">
+    <span>棚卸し対象 <b>42</b> 文字列</span>
+    <span>ブレあり <b class="flagnum">16</b> 箇所</span>
+    <span>実装 <b class="goodnum">対応ずみ</b>（PR #11）</span>
+    <span>決定 A / B <b class="goodnum">確定</b>（A-1 / B-1）</span>
+  </div>
+
+  <div class="callout decision">
+    <h3>#48 で承認工程を廃止</h3>
+    <p>
+      子のタップで記録は<strong>その場で確定</strong>し、「＋◯こ もらった！」演出が出る。親側の
+      <span class="s">承認</span>タブ・一括承認・却下は撤去（親タブは
+      <span class="s">今日の集計 / 設定</span>の2つ）。不正・打ち間違いは今日の集計の
+      <span class="s">🗑</span>で消す。子の
+      <span class="s">かくにんまち ◯こ</span> 見込み表示（#17）も撤去。
+      <strong>以下の「申請 / 承認 / 承認まち / 却下」まわりの記述は歴史的記録</strong
+      >で、いま画面には出ない。生きているのは fixed/timed
+      シート・PIN・今日の集計・締め・設定の文言と漢字ポリシー。
+    </p>
+  </div>
+
+  <h2>1 · 先に決めること</h2>
+  <p>
+    2026-08-28 に確定（<a href="https://github.com/onishigyo/ohajiki-app/issues/3">#3</a>）。
+    下の表の「あるべき文言」はこの2つの決定を反映ずみ。
+  </p>
+
+  <div class="callout decision">
+    <h3>
+      決定 A — 子ども画面の漢字 → <span style="color: var(--good)">小4まで（v2・2026-08-28）</span>
+    </h3>
+    <p>
+      当初 A-1（小2まで）で実装 → 対象の子どもの読解に合わせて
+      <strong>小4までの教育漢字は使う（ふりがな無し）</strong>に引き上げ。 具体的には
+      <span class="s s-old">なにを</span>→<span class="s s-new">何を</span>、
+      <span class="s s-old">おねがい</span>→<span class="s s-new">お願い</span>、
+      <span class="s s-old">まえの</span>→<span class="s s-new">前の</span>、
+      <span class="s s-old">おしてね</span>→<span class="s s-new">押してね</span>。
+      範囲外・かなの方が読みやすい語（<span class="s">がんばる</span>／<span class="s">もらう</span
+      >／ <span class="s">おはじき</span>／<span class="s">かくにん</span
+      >＝認は6年）はかな。分かち書きは維持。
+    </p>
+  </div>
+
+  <div class="callout decision">
+    <h3>決定 B — 親画面 → <span style="color: var(--good)">通常どおり漢字（v2）</span></h3>
+    <p>
+      当初 B-1（かな寄り）→ <strong>親画面はかな縛りをやめて通常の漢字。</strong>
+      <span class="s s-old">けす／けってい</span>→<span class="s s-new">消す／決定</span>、
+      <span class="s s-old">とじる</span>→<span class="s s-new">閉じる</span>、
+      <span class="s s-old">もどす</span>→<span class="s s-new">戻す</span>、
+      <span class="s s-old">わたした</span>→<span class="s s-new">渡した</span>、
+      <span class="s s-old">よびかた</span>→<span class="s s-new">呼び方</span>、
+      <span class="s s-old">あんしょうばんごう</span>→<span class="s s-new">暗証番号</span>。
+      トースト＝「〜しました」、見出し＝体言止め、絵文字なし は継続。
+    </p>
+  </div>
+
+  <h2>2 · 表記ルール</h2>
+
+  <h3>助数詞は数字にくっつける（スペースなし）</h3>
+  <p>
+    <span class="s s-old">3 こ もらえるよ</span> → <span class="s s-new">3こ もらえる</span>。
+    <span class="s">45分</span>
+    <span class="s">3回</span> も同じ。単語の区切りのスペースとは別扱い。
+  </p>
+
+  <h3>時間・回数は「分」「回」（決定 A-1）</h3>
+  <p>
+    子ども画面も含めて漢字に統一：<span class="s">15分で 2こ</span>、
+    <span class="s">30分 → 4こ</span>、<span class="s">2回</span>、<span class="s"
+      >3回ぶん（45分）</span
+    >。 「◯回ぶん」の「ぶん」だけ、分（フン）と読みがぶつからないようかな。
+  </p>
+
+  <h3>単語の間のスペースは子ども画面だけ</h3>
+  <p>
+    <span class="s">今日 なにを がんばった？</span>
+    のような分かち書きは早く読めるので<strong>継続</strong>。 親画面は詰める（<span class="s"
+      >今日の集計</span
+    >）。ルールを明文化するだけで、いま揃っている。
+  </p>
+
+  <h3>絵文字は「1メッセージに最大1つ・空状態のみ」</h3>
+  <p>
+    トーストは <span class="s">おねがいしたよ！ 🌟</span> と
+    <span class="s">却下しました</span>（無し）が混在。 →
+    子どものトーストは末尾に1つまで、親のトースト・操作ボタンは絵文字なし、空状態（<span class="s"
+      >🫙</span
+    >
+    <span class="s">✅</span>）は可。
+  </p>
+
+  <h3>アプリ名</h3>
+  <p>
+    正式：<span class="s">おはじき銀行</span
+    >。見出しも同じ（装飾なし）。ホーム画面の短縮名（manifest short_name）<span class="s"
+      >おはじき</span
+    >
+    はアイコン文脈なので可。
+  </p>
+
+  <h2>3 · 用語辞典（1概念1語）</h2>
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>概念</th>
+          <th>使う語</th>
+          <th>やめる語</th>
+          <th>メモ</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>アプリ内通貨</td>
+          <td><span class="s">おはじき</span></td>
+          <td>—</td>
+          <td class="why">物理のおはじきと同じ呼び方で統一</td>
+        </tr>
+        <tr>
+          <td>おはじきの数え方</td>
+          <td><span class="s">こ</span>（例 <span class="s">3こ</span>）</td>
+          <td>枚 / 個</td>
+          <td class="why">数字直後、スペースなし</td>
+        </tr>
+        <tr>
+          <td>稼げる項目1つ</td>
+          <td><span class="s">がんばること</span></td>
+          <td>メニュー / やること</td>
+          <td class="why">ホームの見出しと設定の見出しを同じ語に。「メニュー」はシステム臭</td>
+        </tr>
+        <tr>
+          <td>子どもが申請する</td>
+          <td><span class="s">おねがい</span>（する）</td>
+          <td>できた / 申請</td>
+          <td class="why">ボタン・トースト・見出しすべてこの語根に</td>
+        </tr>
+        <tr>
+          <td>承認待ちの状態</td>
+          <td><span class="s">おねがいちゅう</span></td>
+          <td>まってね / 承認まち</td>
+          <td class="why">子ども画面はこの1語（バッジも見出しも）</td>
+        </tr>
+        <tr>
+          <td>親が承認する（操作）</td>
+          <td><span class="s">承認</span></td>
+          <td>—</td>
+          <td class="why">親のボタン／タブ。子ども向け表示は下行</td>
+        </tr>
+        <tr>
+          <td>承認された（子ども向け）</td>
+          <td><span class="s">OK もらえた</span></td>
+          <td>—</td>
+          <td class="why">子ども画面で承認結果を見せる時</td>
+        </tr>
+        <tr>
+          <td>親が差し戻す</td>
+          <td><span class="s">もどす</span> / <span class="s">もどしました</span></td>
+          <td>却下</td>
+          <td class="why">「却下」はお役所語で世界観に合わない</td>
+        </tr>
+        <tr>
+          <td>時間の単位</td>
+          <td><span class="s">ふん</span></td>
+          <td>分（子ども画面では）</td>
+          <td class="why">15分 = 1回</td>
+        </tr>
+        <tr>
+          <td>timed のタップ回数</td>
+          <td><span class="s">かい</span>（例 <span class="s">3かい</span>）</td>
+          <td>回</td>
+          <td class="why">3かい = 45ふんぶん</td>
+        </tr>
+        <tr>
+          <td>その日の合計枚数</td>
+          <td><span class="s">今日 もらえる／わたす おはじき</span></td>
+          <td>配るおはじき / もらえるおはじき</td>
+          <td class="why">子ども画面と親の集計で<strong>同じ見出し</strong>にする</td>
+        </tr>
+        <tr>
+          <td>相手の呼び方</td>
+          <td><span class="s">おうちの人</span>（初期値・変更可）</td>
+          <td>ママ / パパ 固定</td>
+          <td class="why"><code>guardianLabel</code>。決め打ち禁止は既定方針</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>4 · 画面別 文言監査</h2>
+  <p>
+    <span class="pill brk">ブレ</span> = 直す。<span class="pill ok">揃</span> =
+    現状維持でよい（基準として明文化）。
+  </p>
+  <p>
+    <strong>この表は最初の監査（A-1 / B-1 前提）のスナップショット。</strong>
+    その後 v2（子=小4漢字 / 親=通常漢字）で「あるべき文言」列の一部が更新されている （<span
+      class="s"
+      >何を</span
+    >・<span class="s">お願い</span>・<span class="s">前の 分</span>・<span class="s">戻す</span
+    >・<span class="s">渡した</span>・<span class="s">閉じる</span> 等）。 現行の正は実装（<code
+      >index.html</code
+    >
+    / <code>src/main.ts</code>）と §1 の決定 A / B。
+  </p>
+
+  <div class="table-scroll">
+    <table>
+      <caption>
+        子ども — ホーム
+      </caption>
+      <thead>
+        <tr>
+          <th>箇所</th>
+          <th>状態</th>
+          <th>いま</th>
+          <th>あるべき</th>
+          <th>理由</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="where">today-label</td>
+          <td><span class="pill brk">ブレ</span></td>
+          <td><span class="s s-old">きょう もらえる おはじき</span></td>
+          <td><span class="s s-new">今日 もらえる おはじき</span></td>
+          <td class="why">
+            A-1：今日 を漢字に。親は <span class="s">今日 わたす おはじき</span> と対に
+          </td>
+        </tr>
+        <tr>
+          <td class="where">todaySub</td>
+          <td><span class="pill brk">ブレ</span></td>
+          <td>
+            <span class="s s-old">すごい！ 3こ がんばったね</span>
+            <span class="s s-old">がんばると たまるよ！</span>
+          </td>
+          <td>（声かけ文は無し・行を隠す）</td>
+          <td class="why">
+            この行は「かくにんまち ◯こ」「まえの ぶん ◯こ も まだ」があるときだけ出す （#17 /
+            #20）。何も無いときは何も出さない（ユーザー判断）
+          </td>
+        </tr>
+        <tr>
+          <td class="where">sec-title</td>
+          <td><span class="pill brk">ブレ</span></td>
+          <td><span class="s s-old">きょう なにを がんばった？</span></td>
+          <td><span class="s s-new">今日 なにを がんばった？</span></td>
+          <td class="why">A-1：今日 を漢字に。分かち書きは維持</td>
+        </tr>
+        <tr>
+          <td class="where">action 報酬 (fixed)</td>
+          <td><span class="pill brk">ブレ</span></td>
+          <td><span class="s s-old">おはじき 2こ</span></td>
+          <td><span class="s s-new">2こ もらえる</span></td>
+          <td class="why">timed 側（下行）と語順・述語を揃える</td>
+        </tr>
+        <tr>
+          <td class="where">action 報酬 (timed)</td>
+          <td><span class="pill brk">ブレ</span></td>
+          <td><span class="s s-old">⏱️ 15ふんで 2こ</span></td>
+          <td><span class="s s-new">⏱️ 15分で 2こ</span></td>
+          <td class="why">A-1：分 を漢字に。fixed（上行）と並ぶ。⏱️ は種別マーク</td>
+        </tr>
+        <tr>
+          <td class="where">pendingTitle</td>
+          <td><span class="pill ok">揃</span></td>
+          <td><span class="s">おうちの人に おねがいちゅう</span></td>
+          <td><span class="s">おうちの人に おねがいちゅう</span></td>
+          <td class="why">用語辞典どおり。維持</td>
+        </tr>
+        <tr>
+          <td class="where">waiting-badge</td>
+          <td><span class="pill brk">ブレ</span></td>
+          <td><span class="s s-old">まってね</span></td>
+          <td><span class="s s-new">おねがいちゅう</span></td>
+          <td class="why">「承認待ち」の呼び方を1つに（用語辞典）</td>
+        </tr>
+        <tr>
+          <td class="where">pending-meta</td>
+          <td><span class="pill brk">ブレ</span></td>
+          <td><span class="s s-old">10:05 ・ 3かいぶん</span></td>
+          <td><span class="s s-new">3かいぶん（45ふん）</span></td>
+          <td class="why">子どもに時刻は不要。timed は回数＋分。fixed は時刻のまま</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="table-scroll">
+    <table>
+      <caption>
+        子ども — 確認シート / 時間シート
+      </caption>
+      <thead>
+        <tr>
+          <th>箇所</th>
+          <th>状態</th>
+          <th>いま</th>
+          <th>あるべき</th>
+          <th>理由</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="where">confirm 報酬行</td>
+          <td><span class="pill brk">ブレ</span></td>
+          <td><span class="s s-old">2 こ もらえるよ</span></td>
+          <td><span class="s s-new">2こ もらえる</span></td>
+          <td class="why">こをくっつける／「〜よ」を落とす</td>
+        </tr>
+        <tr>
+          <td class="where">confirm / timed 送信ボタン</td>
+          <td><span class="pill ok">確定</span></td>
+          <td colspan="2">
+            <span class="s">できた！</span>（#48：承認廃止でその場確定に。両シート同じ語）
+          </td>
+          <td class="why">タップ＝もらう。依頼ではないので「お願い」系は使わない</td>
+        </tr>
+        <tr>
+          <td class="where">timed 送信ボタン</td>
+          <td><span class="pill brk">ブレ</span></td>
+          <td><span class="s s-old">おねがい する</span></td>
+          <td><span class="s s-new">おねがい する</span></td>
+          <td class="why">こちらに寄せる。文言は据え置き、confirm 側を合わせる</td>
+        </tr>
+        <tr>
+          <td class="where">confirm / timed 取消</td>
+          <td><span class="pill ok">揃</span></td>
+          <td><span class="s">やめる</span></td>
+          <td><span class="s">やめる</span></td>
+          <td class="why">両シート一致済み。維持（キャンセル導線の穴は #8）</td>
+        </tr>
+        <tr>
+          <td class="where">timed hint</td>
+          <td><span class="pill brk">ブレ</span></td>
+          <td>
+            HTML <span class="s s-old">15ふん やったら 1かい おしてね</span> を JS が
+            <span class="s s-old">15ふん やったら「＋15ふん」を おしてね</span> で上書き
+          </td>
+          <td><span class="s s-new">15分 できたら ＋15分 を おしてね</span></td>
+          <td class="why">HTML の死に文字列を消す。1つに</td>
+        </tr>
+        <tr>
+          <td class="where">timed readout</td>
+          <td><span class="pill ok">揃</span></td>
+          <td><span class="s">45 ふん → 6 こ</span></td>
+          <td><span class="s s-new">45ふん → 6こ</span></td>
+          <td class="why">助数詞をくっつけるだけ</td>
+        </tr>
+        <tr>
+          <td class="where">stepper 中央</td>
+          <td><span class="pill ok">揃</span></td>
+          <td><span class="s">3 かい</span></td>
+          <td><span class="s s-new">3かい</span></td>
+          <td class="why">同上</td>
+        </tr>
+        <tr>
+          <td class="where">申請トースト</td>
+          <td><span class="pill ok">揃</span></td>
+          <td><span class="s">おうちの人に おねがいしたよ！ 🌟</span></td>
+          <td><span class="s s-new">おうちの人に おねがいしたよ 🌟</span></td>
+          <td class="why">絵文字1つはOK。「！」を落として絵文字に一本化</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="table-scroll">
+    <table>
+      <caption>
+        親 — 集計 / 承認（承認まわりは #48 で撤去。歴史的記録）
+      </caption>
+      <thead>
+        <tr>
+          <th>箇所</th>
+          <th>状態</th>
+          <th>いま</th>
+          <th>あるべき</th>
+          <th>理由</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="where">タブ</td>
+          <td><span class="pill ok">揃</span></td>
+          <td colspan="2"><span class="s">今日の集計 / 設定</span>（#48：承認タブ撤去）</td>
+          <td class="why">親画面の体言止め</td>
+        </tr>
+        <tr>
+          <td class="where">集計 見出し</td>
+          <td><span class="pill brk">ブレ</span></td>
+          <td><span class="s s-old">今日 配るおはじき</span></td>
+          <td><span class="s s-new">今日の おはじき</span></td>
+          <td class="why">
+            「配る」＝親視点、子は「もらう」。視点語を統一し、子ホームと同じ見出しに
+          </td>
+        </tr>
+        <tr>
+          <td class="where">集計 補足</td>
+          <td><span class="pill brk">ブレ</span></td>
+          <td><span class="s s-old">承認した 3件の合計です</span></td>
+          <td><span class="s s-new">承認ずみ 3件の合計</span></td>
+          <td class="why">B-1：体言止め、「です」を外す。件はここだけ許容</td>
+        </tr>
+        <tr>
+          <td class="where">内訳 見出し</td>
+          <td><span class="pill ok">揃</span></td>
+          <td><span class="s">今日の内訳</span></td>
+          <td><span class="s">今日の内訳</span></td>
+          <td class="why">維持</td>
+        </tr>
+        <tr>
+          <td class="where">内訳 報酬</td>
+          <td><span class="pill brk">ブレ</span></td>
+          <td><span class="s s-old">+2</span></td>
+          <td><span class="s s-new">+2こ</span></td>
+          <td class="why">他が全部「こ」付き。ここだけ単位落ち</td>
+        </tr>
+        <tr>
+          <td class="where">集計 空</td>
+          <td><span class="pill brk">ブレ</span></td>
+          <td><span class="s s-old">まだ承認したものはありません</span></td>
+          <td><span class="s s-new">承認ずみは まだありません</span></td>
+          <td class="why">B-1：常体で最短。「もの」を消す</td>
+        </tr>
+        <tr>
+          <td class="where">承認 項目サブ</td>
+          <td><span class="pill brk">ブレ</span></td>
+          <td>
+            <span class="s s-old">10:05 ・ 2こ</span> /
+            <span class="s s-old">3かいぶん（45ふん） ・ 2こ</span>
+          </td>
+          <td>
+            <span class="s s-new">10:05 ・ 2こ</span> /
+            <span class="s s-new">45ふん（3かい） ・ 6こ</span>
+          </td>
+          <td class="why">timed は分を先に（親は分で考える）。順序を固定</td>
+        </tr>
+        <tr>
+          <td class="where">却下ボタン</td>
+          <td><span class="pill brk">ブレ</span></td>
+          <td><span class="s s-old">×</span></td>
+          <td><span class="s s-new">もどす</span></td>
+          <td class="why">「×」は却下か閉じるか曖昧。動作を言葉に</td>
+        </tr>
+        <tr>
+          <td class="where">承認ボタン</td>
+          <td><span class="pill ok">揃</span></td>
+          <td><span class="s">承認</span></td>
+          <td><span class="s">承認</span></td>
+          <td class="why">維持</td>
+        </tr>
+        <tr>
+          <td class="where">承認 空</td>
+          <td><span class="pill brk">ブレ</span></td>
+          <td><span class="s s-old">承認まちは ありません</span></td>
+          <td><span class="s s-new">承認まちは なし</span></td>
+          <td class="why">B-1 の常体最短に統一</td>
+        </tr>
+        <tr>
+          <td class="where">承認トースト</td>
+          <td><span class="pill brk">ブレ</span></td>
+          <td><span class="s s-old">おはじきを あげました 🌟</span></td>
+          <td><span class="s s-new">承認しました</span></td>
+          <td class="why">親トーストは絵文字なし・「〜しました」。動作を言う</td>
+        </tr>
+        <tr>
+          <td class="where">却下トースト</td>
+          <td><span class="pill brk">ブレ</span></td>
+          <td><span class="s s-old">却下しました</span></td>
+          <td><span class="s s-new">もどしました</span></td>
+          <td class="why">「却下」語を全廃（用語辞典）</td>
+        </tr>
+        <tr>
+          <td class="where">PIN 間違い</td>
+          <td><span class="pill brk">ブレ</span></td>
+          <td><span class="s s-old">ちがうよ 🔒</span></td>
+          <td><span class="s s-new">ばんごうが ちがいます</span></td>
+          <td class="why">親が見るエラー。何がどう違うか言う。絵文字なし</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="table-scroll">
+    <table>
+      <caption>
+        親 — PIN / 設定
+      </caption>
+      <thead>
+        <tr>
+          <th>箇所</th>
+          <th>状態</th>
+          <th>いま</th>
+          <th>あるべき</th>
+          <th>理由</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="where">PIN 見出し</td>
+          <td><span class="pill ok">揃</span></td>
+          <td><span class="s">おうちの人へ</span></td>
+          <td><span class="s">おうちの人へ</span></td>
+          <td class="why">子どもが読む前提の入口。維持</td>
+        </tr>
+        <tr>
+          <td class="where">PIN 補足</td>
+          <td><span class="pill brk">ブレ</span></td>
+          <td><span class="s s-old">あんしょうばんごうを いれてね（さいしょは 0000）</span></td>
+          <td><span class="s s-new">あんしょうばんごうを いれてね（さいしょは 0000）</span></td>
+          <td class="why">文言は可。ただし設定側ラベルと語を合わせる（次行）</td>
+        </tr>
+        <tr>
+          <td class="where">keypad</td>
+          <td><span class="pill brk">ブレ</span></td>
+          <td><span class="s s-old">けす</span> / <span class="s s-old">OK</span></td>
+          <td><span class="s s-new">けす</span> / <span class="s s-new">けってい</span></td>
+          <td class="why">「OK」だけ英字。かなに揃える</td>
+        </tr>
+        <tr>
+          <td class="where">設定 見出し1</td>
+          <td><span class="pill brk">ブレ</span></td>
+          <td><span class="s s-old">がんばりメニュー</span></td>
+          <td><span class="s s-new">がんばること</span></td>
+          <td class="why">「メニュー」廃止（用語辞典）。ホーム見出しと同語根</td>
+        </tr>
+        <tr>
+          <td class="where">凡例</td>
+          <td><span class="pill brk">ブレ</span></td>
+          <td><span class="s s-old">⏱️ 15分ごとに もらえる</span></td>
+          <td><span class="s s-new">⏱️ 15分ごとに もらえる</span></td>
+          <td class="why">「分」→「ふん」。子どもの報酬の説明なので</td>
+        </tr>
+        <tr>
+          <td class="where">追加ボタン</td>
+          <td><span class="pill brk">ブレ</span></td>
+          <td><span class="s s-old">＋ メニューを ふやす</span></td>
+          <td><span class="s s-new">＋ がんばることを ふやす</span></td>
+          <td class="why">用語統一</td>
+        </tr>
+        <tr>
+          <td class="where">設定 見出し2</td>
+          <td><span class="pill ok">揃</span></td>
+          <td><span class="s">よびかた</span></td>
+          <td><span class="s">よびかた</span></td>
+          <td class="why">維持</td>
+        </tr>
+        <tr>
+          <td class="where">よびかた 説明</td>
+          <td><span class="pill ok">揃</span></td>
+          <td><span class="s">おねがいする相手の呼び方</span></td>
+          <td><span class="s s-new">おねがいする 相手の よびかた</span></td>
+          <td class="why">「呼び方」→見出しと同じ「よびかた」に表記統一</td>
+        </tr>
+        <tr>
+          <td class="where">設定 見出し3</td>
+          <td><span class="pill brk">ブレ</span></td>
+          <td><span class="s s-old">あんしょうばんごう</span></td>
+          <td><span class="s">あんしょうばんごう</span></td>
+          <td class="why">語は可。説明文（次行）を直す</td>
+        </tr>
+        <tr>
+          <td class="where">PIN 説明</td>
+          <td><span class="pill brk">ブレ</span></td>
+          <td><span class="s s-old">4けたの数字</span></td>
+          <td><span class="s s-new">4けたの すうじ</span></td>
+          <td class="why">「数字」だけ漢字。設定内で表記を揃える</td>
+        </tr>
+        <tr>
+          <td class="where">危険ボタン</td>
+          <td><span class="pill ok">揃</span></td>
+          <td><span class="s">今日の記録を すべて消す</span></td>
+          <td><span class="s">今日の記録を すべて消す</span></td>
+          <td class="why">親向け・破壊的操作。はっきりした語のまま維持</td>
+        </tr>
+        <tr>
+          <td class="where">消去トースト</td>
+          <td><span class="pill ok">揃</span></td>
+          <td><span class="s">今日の記録を消しました</span></td>
+          <td><span class="s">今日の記録を消しました</span></td>
+          <td class="why">B-1 どおり。維持</td>
+        </tr>
+        <tr>
+          <td class="where">とじるボタン</td>
+          <td><span class="pill ok">揃</span></td>
+          <td><span class="s">とじる</span></td>
+          <td><span class="s">とじる</span></td>
+          <td class="why">維持</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>5 · 実装メモ</h2>
+  <p>決定 A / B が付いたら、この順で1 PR にまとめる想定。</p>
+  <ul class="tight">
+    <li>
+      <code>index.html</code> — confirm 送信ボタン、confirm 報酬行、timed hint（死に文字列削除）、
+      PIN 補足、keypad は <code>buildKeypad()</code> 側
+    </li>
+    <li>
+      <code>src/main.ts</code> — <code>renderChild</code>（today-label は
+      <code>index.html</code>、todaySub、action 報酬、waiting-badge、pending-meta）、
+      <code>renderToday</code> / <code>renderApprove</code> の見出し・サブ・空状態・トースト、
+      <code>renderSettings</code> の見出し・凡例・追加ボタン・説明、<code>decide()</code> と
+      <code>pinCheck()</code> のトースト
+    </li>
+    <li>
+      <code>src/logic.ts</code> — <code>unitsLabel()</code> の並び順（<span class="s"
+        >45ふん（3かい）</span
+      >）。 <code>DEFAULT_RULES</code> の名前はそのまま
+    </li>
+    <li>
+      文言が仕様と一致しているかの軽いガードテスト（主要ボタン・トーストの固定値）を
+      <code>src/</code> に足すか検討
+    </li>
+  </ul>
+
+  <footer>
+    おはじき銀行 内部仕様 · 実装 PR
+    <a href="https://github.com/onishigyo/ohajiki-app/pull/11">#11</a> · 決定 A-1 / B-1
+    で確定（2026-08-28）
+  </footer>
+</div>

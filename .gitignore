@@ -1,0 +1,44 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Build & Dependencies
+node_modules
+dist
+dist-ssr
+.vite
+.wrangler
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# Project specific
+*.timestamp-*
+*.tsbuildinfo
+coverage
+
+# Claude Code
+# launch.json（プレビュー用の dev 起動設定）は共有する。個人ごとの設定は除外。
+.claude/settings.local.json
+
+# 実データ（子どもの記録の書き出し JSON 等）は絶対にコミットしない
+*.ohajiki.json
+/private-data/
+
+# マスコット等の元画像は手元だけ。配信ぶんは public/ に切り出して置く（assets/README.md）
+assets/*.png
+assets/*.jpg

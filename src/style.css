@@ -1,0 +1,1088 @@
+:root {
+  --bg: #fef6ee;
+  --card: #ffffff;
+  --ink: #4a3f35;
+  --ink-soft: #8a7d70;
+  --line: #f0e4d6;
+  --pink: #f28ba8;
+  --pink-soft: #fde3ea;
+  --mint: #5fc7ad;
+  --mint-soft: #d9f3ec;
+  --yellow: #f5c451;
+  --purple: #b79ae0;
+  --blue: #7cc0e8;
+  --orange: #f2a25c;
+}
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+body {
+  background: var(--bg);
+  font-family: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", sans-serif;
+  color: var(--ink);
+  min-height: 100vh;
+  -webkit-user-select: none;
+  user-select: none;
+  overflow-x: hidden;
+  /* ダブルタップ拡大を無効化（PIN 連打で拡大していた・#37）。
+     スクロールは残る。子ども用アプリで画面拡大は使わない。 */
+  touch-action: manipulation;
+}
+.app {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 20px 18px 40px;
+  min-height: 100vh;
+}
+
+/* ===== ヘッダ:残高(今日たまったおはじき) ===== */
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+.top h1 {
+  font-size: 19px;
+  font-weight: 900;
+  margin: 0;
+  letter-spacing: 0.02em;
+}
+.gear {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: none;
+  background: var(--card);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s;
+}
+.gear:active {
+  transform: scale(0.9) rotate(40deg);
+}
+
+.today-card {
+  background: linear-gradient(135deg, #fff 60%, var(--pink-soft));
+  border-radius: 24px;
+  padding: 18px 22px;
+  margin: 12px 0 18px;
+  box-shadow: 0 6px 20px rgba(242, 139, 168, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+.today-label {
+  font-size: 14px;
+  color: var(--ink-soft);
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+.today-count {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.today-count .num {
+  font-size: 46px;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--pink);
+}
+.today-count .unit {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+.today-sub {
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  margin-top: 8px;
+}
+/* おはじきの粒は「今日の数」とぴったり同数。数字の右の空きに浮かせる。
+   1行きっちり10こで、下の行から埋めて上に積み上がる（瓶にたまる感じ）。
+   ＝満杯の行が下に揃い、増えかけの端数だけが上に乗る。
+   粒が3段以上になったら renderChild() がカードの min-height を伸ばす。 */
+.beads-row {
+  position: absolute;
+  bottom: 14px;
+  right: 18px;
+  width: calc(10 * 14px + 9 * 4px);
+  display: flex;
+  flex-wrap: wrap-reverse;
+  justify-content: flex-start;
+  gap: 4px;
+  pointer-events: none;
+}
+
+/* ===== 見出し ===== */
+.sec-title {
+  font-size: 15px;
+  font-weight: 700;
+  margin: 24px 4px 12px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.sec-title .dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--pink);
+}
+
+/* ===== がんばることリスト(子ども) ===== */
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.action-btn {
+  background: var(--card);
+  border: none;
+  border-radius: 14px;
+  padding: 11px 14px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  text-align: left;
+  transition:
+    transform 0.1s,
+    box-shadow 0.1s;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.action-btn:active {
+  transform: scale(0.98);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+.action-emoji {
+  font-size: 24px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.action-name {
+  flex: 1;
+  min-width: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.action-reward {
+  flex-shrink: 0;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #fff;
+  background: var(--mint);
+  padding: 3px 9px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+/* ===== 空の状態 ===== */
+.empty {
+  text-align: center;
+  padding: 30px 20px;
+  color: var(--ink-soft);
+  font-size: 13.5px;
+  line-height: 1.8;
+}
+.empty .big {
+  font-size: 40px;
+  display: block;
+  margin-bottom: 8px;
+  opacity: 0.7;
+}
+
+/* ===== モーダル共通 ===== */
+/* 小さいダイアログ（できた！ / ＋15分 / はい・やめる / PIN）は画面中央。
+   親の管理画面だけは #parentOverlay がフルスクリーンに上書きする。 */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(74, 63, 53, 0.45);
+  backdrop-filter: blur(3px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 100;
+}
+.overlay.show {
+  display: flex;
+}
+.sheet {
+  background: var(--bg);
+  width: min(100%, 380px);
+  border-radius: 28px;
+  padding: 26px 22px;
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+  animation: popIn 0.24s cubic-bezier(0.2, 1.4, 0.4, 1);
+}
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: scale(0.86);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sheet {
+    animation: fadeIn 0.15s;
+  }
+}
+.sheet h2 {
+  font-size: 18px;
+  font-weight: 900;
+  margin: 0 0 4px;
+}
+.sheet .sheet-sub {
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin-bottom: 18px;
+}
+
+/* 確認ダイアログ(子どもがタップした時) */
+.confirm-card {
+  text-align: center;
+  padding: 8px 0 4px;
+}
+.confirm-emoji {
+  font-size: 64px;
+  margin-bottom: 10px;
+}
+.confirm-name {
+  font-size: 22px;
+  font-weight: 900;
+  margin-bottom: 4px;
+}
+.confirm-reward {
+  font-size: 15px;
+  color: var(--ink-soft);
+  margin-bottom: 24px;
+}
+.confirm-reward b {
+  color: var(--mint);
+  font-size: 20px;
+}
+
+/* 時間シート(timed ルール) */
+.timed-hint {
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin-bottom: 16px;
+}
+.timed-readout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 16px;
+  color: var(--ink-soft);
+  margin-bottom: 18px;
+}
+.timed-readout b {
+  font-size: 24px;
+  font-weight: 900;
+  color: var(--ink);
+}
+.timed-get b {
+  color: var(--mint);
+}
+.timed-arrow {
+  color: var(--ink-soft);
+}
+.timed-steppers {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.stepper {
+  border: none;
+  border-radius: 16px;
+  padding: 14px 18px;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 800;
+  color: #fff;
+  background: var(--mint);
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+.stepper:active {
+  transform: scale(0.94);
+}
+.stepper:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+#tMinus {
+  background: var(--card);
+  color: var(--ink-soft);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  min-width: 52px;
+}
+.timed-taps {
+  font-size: 14px;
+  color: var(--ink-soft);
+  min-width: 56px;
+}
+.timed-taps b {
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--pink);
+}
+
+.btn-row {
+  display: flex;
+  gap: 12px;
+}
+.btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.btn {
+  flex: 1;
+  border: none;
+  border-radius: 16px;
+  padding: 16px;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+.btn:active {
+  transform: scale(0.96);
+}
+.btn-primary {
+  background: var(--pink);
+  color: #fff;
+}
+.btn-ghost {
+  background: var(--card);
+  color: var(--ink-soft);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* ===== 親エリア ===== */
+.parent-lock {
+  text-align: center;
+  padding: 10px 0;
+}
+.pin-dots {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  margin: 20px 0 24px;
+}
+.pin-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--line);
+  transition: background 0.15s;
+}
+.pin-dot.filled {
+  background: var(--pink);
+}
+.keypad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  max-width: 280px;
+  margin: 0 auto;
+}
+.key {
+  background: var(--card);
+  border: none;
+  border-radius: 16px;
+  padding: 16px;
+  font-size: 22px;
+  font-weight: 700;
+  font-family: inherit;
+  color: var(--ink);
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+.key:active {
+  transform: scale(0.94);
+}
+.key.wide {
+  grid-column: span 1;
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+
+/* 親の管理画面は「別画面」としてフルスクリーン。タブと「閉じる」を貼り付けて
+   スクロールしても構成が見えるようにする。 */
+#parentOverlay {
+  padding: 0;
+  align-items: stretch;
+  background: var(--bg);
+  backdrop-filter: none;
+}
+#parentOverlay .sheet {
+  width: 100%;
+  max-width: 560px;
+  height: 100%;
+  max-height: 100%;
+  border-radius: 0;
+  padding: max(env(safe-area-inset-top), 6px) 22px 0;
+  animation: fadeIn 0.18s ease;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+/* 中身だけスクロール。タブと「閉じる」は常に見える。 */
+.parent-scroll {
+  flex: 1;
+  overflow-y: auto;
+  margin: 0 -22px;
+  padding: 0 22px 16px;
+}
+#parentOverlay .save-bar {
+  position: static;
+  flex-shrink: 0;
+}
+.parent-tabs {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+  background: var(--bg);
+  margin: 0 -22px 14px;
+  padding: 10px 22px 12px;
+}
+.ptab {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 14px;
+  background: var(--card);
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+.ptab.active {
+  background: var(--pink);
+  color: #fff;
+}
+
+/* 今日の集計 */
+.summary-big {
+  background: linear-gradient(135deg, #fff, var(--mint-soft));
+  border-radius: 22px;
+  padding: 22px;
+  text-align: center;
+  margin-bottom: 18px;
+}
+.summary-big .lbl {
+  font-size: 13px;
+  color: var(--ink-soft);
+  font-weight: 500;
+}
+.summary-big .n {
+  font-size: 48px;
+  font-weight: 900;
+  color: var(--mint);
+  line-height: 1.1;
+}
+.summary-big .u {
+  font-size: 16px;
+  color: var(--ink-soft);
+  font-weight: 700;
+}
+.summary-note {
+  font-size: 12px;
+  color: var(--ink-soft);
+  margin-top: 6px;
+}
+
+/* 今日の集計：日付ごとの「締めブロック」（#20） */
+.settle-block {
+  background: linear-gradient(135deg, #fff, var(--mint-soft));
+  border-radius: 20px;
+  padding: 16px 16px 14px;
+  margin-bottom: 16px;
+}
+.settle-block--old {
+  background: linear-gradient(135deg, #fff, var(--pink-soft));
+}
+.settle-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 10px;
+}
+.settle-total {
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--mint);
+}
+.settle-block--old .settle-total {
+  color: var(--pink);
+}
+.settle-block .full-btn {
+  margin-top: 4px;
+  background: var(--mint);
+}
+.settle-block .full-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* 子ども画面のタブ（今日 / これまで）（#16） */
+.child-tabs {
+  display: flex;
+  gap: 8px;
+  margin: 10px 0 4px;
+}
+.child-tab {
+  flex: 1;
+  padding: 9px;
+  border: none;
+  border-radius: 14px;
+  background: var(--card);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink-soft);
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+.child-tab.active {
+  background: var(--pink);
+  color: #fff;
+}
+
+/* 履歴（#16）：これまで もらった おはじき + もらった数の棒グラフ */
+.history-total {
+  text-align: center;
+  font-size: 15px;
+  color: var(--ink-soft);
+  margin: 18px 0 22px;
+}
+.history-total b {
+  font-size: 34px;
+  font-weight: 900;
+  color: var(--pink);
+}
+.chart {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 4px;
+  height: 172px;
+  padding: 10px 8px 0;
+  background: var(--card);
+  border-radius: 18px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+}
+.chart-bar {
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 46px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.chart-v {
+  font-size: 11px;
+  font-weight: 900;
+  color: var(--ink-soft);
+  padding-bottom: 3px;
+}
+.chart-track {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+}
+.chart-fill {
+  width: 100%;
+  min-height: 5px;
+  border-radius: 7px 7px 4px 4px;
+  background:
+    radial-gradient(circle at 50% 7px, #ffffffcc, #ffffff00 11px),
+    linear-gradient(180deg, #ffffff55, #ffffff00 40%), var(--c);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: height 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.chart-d {
+  font-size: 9px;
+  color: var(--ink-soft);
+  padding-top: 5px;
+  white-space: nowrap;
+}
+
+/* 確認ダイアログは親パネルの上に出す */
+#askOverlay {
+  z-index: 150;
+}
+#askText {
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.6;
+  margin: 4px 0 22px;
+}
+
+.log-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--card);
+  border-radius: 14px;
+  margin-bottom: 8px;
+}
+.log-emoji {
+  font-size: 22px;
+}
+.log-info {
+  flex: 1;
+}
+.log-name {
+  font-size: 14px;
+  font-weight: 700;
+}
+.log-time {
+  font-size: 11px;
+  color: var(--ink-soft);
+}
+.log-reward {
+  font-size: 14px;
+  font-weight: 900;
+  color: var(--mint);
+}
+/* 記録を1件消す（#48） */
+.log-del {
+  flex: none;
+  border: none;
+  background: none;
+  font-size: 16px;
+  padding: 4px;
+  cursor: pointer;
+  opacity: 0.55;
+}
+.log-del:active {
+  transform: scale(0.85);
+}
+
+/* 設定:ルール編集 */
+.rule-legend {
+  display: flex;
+  gap: 14px;
+  font-size: 11.5px;
+  color: var(--ink-soft);
+  margin: 0 4px 10px;
+}
+.rule-edit {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--card);
+  border-radius: 14px;
+  padding: 8px 8px 8px 4px;
+  margin-bottom: 8px;
+}
+.rule-move {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  gap: 2px;
+}
+.rule-move button {
+  border: none;
+  background: none;
+  color: var(--ink-soft);
+  font-size: 10px;
+  line-height: 1;
+  padding: 3px 2px;
+  cursor: pointer;
+}
+.rule-move button:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+.rule-move button:active:not(:disabled) {
+  color: var(--pink);
+}
+.rule-kind-btn {
+  border: none;
+  border-radius: 12px;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  font-size: 18px;
+  color: var(--ink-soft);
+  background: var(--line);
+  cursor: pointer;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+}
+.rule-kind-btn:active {
+  transform: scale(0.92);
+}
+.rule-emoji-btn {
+  font-size: 22px;
+  background: var(--pink-soft);
+  border: none;
+  border-radius: 12px;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.rule-name-input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+  border-bottom: 2px solid var(--line);
+  padding: 4px 2px;
+}
+.rule-name-input:focus {
+  outline: none;
+  border-bottom-color: var(--pink);
+}
+.rule-reward-box {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.rule-reward-input {
+  width: 40px;
+  border: none;
+  background: var(--mint-soft);
+  border-radius: 10px;
+  text-align: center;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 900;
+  color: #3a9d84;
+  padding: 7px 0;
+}
+.rule-reward-input:focus {
+  outline: none;
+}
+.rule-del {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  opacity: 0.5;
+  padding: 2px;
+  flex-shrink: 0;
+}
+.add-rule {
+  width: 100%;
+  padding: 14px;
+  border: 2px dashed var(--line);
+  border-radius: 14px;
+  background: none;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink-soft);
+  cursor: pointer;
+  margin-top: 6px;
+}
+.backup-note {
+  font-size: 12px;
+  color: var(--ink-soft);
+  margin: 0 4px 10px;
+  line-height: 1.5;
+}
+.backup-row {
+  display: flex;
+  gap: 8px;
+}
+.backup-btn {
+  flex: 1;
+  padding: 13px 8px;
+  border: none;
+  border-radius: 14px;
+  background: var(--card);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+.backup-btn:active {
+  transform: scale(0.97);
+}
+.emoji-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+.emoji-opt {
+  font-size: 28px;
+  padding: 8px;
+  background: var(--card);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+}
+.emoji-opt:active {
+  transform: scale(0.9);
+}
+
+.toast {
+  position: fixed;
+  top: calc(16px + env(safe-area-inset-top));
+  left: 50%;
+  transform: translateX(-50%) translateY(-16px);
+  background: var(--ink);
+  color: #fff;
+  padding: 14px 24px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 700;
+  opacity: 0;
+  transition: all 0.3s;
+  z-index: 200;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.save-bar {
+  position: sticky;
+  bottom: 0;
+  background: var(--bg);
+  margin: 18px -22px 0;
+  padding: 12px 22px calc(6px + env(safe-area-inset-bottom));
+}
+.full-btn {
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 16px;
+  background: var(--pink);
+  color: #fff;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.full-btn:active {
+  transform: scale(0.98);
+}
+
+/* おはじきの粒 */
+.bead {
+  flex: 0 0 auto;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 30%, #fff9, transparent 45%), var(--c, var(--pink));
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
+}
+/* ===== デイリー・グリーティング（#51）===== */
+.greeting[hidden] {
+  display: none;
+}
+.greeting {
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 32px;
+  background: var(--bg);
+  opacity: 0;
+  transition: opacity 0.25s;
+  cursor: pointer;
+}
+.greeting.show {
+  opacity: 1;
+}
+/* 元絵は縦長（≒5:7）。正方形に切らず全身（脚まで）を見せる。 */
+.greeting-figure {
+  width: min(64vw, 236px);
+}
+.greeting.show .greeting-figure {
+  animation: greetBob 2.8s ease-in-out 0.5s infinite;
+}
+.greeting-img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 7 / 10;
+  object-fit: contain;
+  border-radius: 36px;
+  background: var(--pink-soft);
+}
+.greeting.show .greeting-img {
+  animation: greetPop 0.44s cubic-bezier(0.2, 1.5, 0.4, 1);
+}
+@keyframes greetPop {
+  from {
+    transform: scale(0.68);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+@keyframes greetBob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+.greeting-line {
+  font-size: 20px;
+  font-weight: 900;
+  line-height: 1.5;
+  color: var(--ink);
+  text-align: center;
+  text-wrap: balance;
+  max-width: 18ch;
+}
+.greeting-tap {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink-soft);
+  opacity: 0.7;
+}
+@media (prefers-reduced-motion: reduce) {
+  .greeting.show .greeting-img,
+  .greeting.show .greeting-figure {
+    animation: none;
+  }
+}
+
+/* ===== タップで「＋◯こ」演出（#14 / #48）===== */
+.celebrate[hidden] {
+  display: none;
+}
+.celebrate {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 300;
+  background: rgba(74, 63, 53, 0.25);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.celebrate.show {
+  opacity: 1;
+}
+.celebrate-card {
+  position: relative;
+  background: linear-gradient(150deg, #fff 55%, var(--pink-soft));
+  border-radius: 28px;
+  padding: 30px 40px 26px;
+  text-align: center;
+  box-shadow: 0 16px 44px rgba(242, 139, 168, 0.32);
+  transform: scale(0.7);
+  transition: transform 0.34s cubic-bezier(0.2, 1.5, 0.4, 1);
+}
+.celebrate.show .celebrate-card {
+  transform: scale(1);
+}
+.celebrate-plus {
+  font-size: 46px;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--pink);
+}
+.celebrate-items {
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+/* 粒が下から舞い上がる */
+.celebrate-burst {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+.celebrate-bead {
+  position: absolute;
+  bottom: 30%;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 30%, #fff9, transparent 45%), var(--c, var(--pink));
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.14);
+  opacity: 0;
+}
+.celebrate.show .celebrate-bead {
+  animation: beadFly 1.1s cubic-bezier(0.25, 0.9, 0.3, 1) forwards;
+  animation-delay: calc(var(--i) * 55ms);
+}
+@keyframes beadFly {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0.5);
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-150px) scale(1);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .celebrate-card {
+    transition: none;
+    transform: none;
+  }
+  .celebrate.show .celebrate-card {
+    transform: none;
+  }
+  .celebrate-burst {
+    display: none;
+  }
+}

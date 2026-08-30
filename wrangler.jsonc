@@ -1,0 +1,11 @@
+// Cloudflare（Workers 静的アセット）のデプロイ設定。
+// `pnpm build` で dist/ に単一 HTML を出力 → `npx wrangler deploy` が dist/ を配信する。
+// Worker スクリプトは持たない（assets のみ）。手順は docs/DEPLOY.md。
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "ohajiki-app",
+  "compatibility_date": "2026-08-01",
+  "assets": {
+    "directory": "./dist",
+  },
+}

@@ -1,0 +1,91 @@
+<!doctype html>
+<!--
+  PWA アイコンの元データ（public/icon-192.png / icon-512.png / apple-touch-icon.png）。
+  このファイルをブラウザで開き #c を 512 / 192 / 180 でスクリーンショットして PNG 化する。
+  （元は headless Chrome スクリプトで生成。手直しはこの SVG を編集して再生成）
+-->
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      html,
+      body {
+        margin: 0;
+      }
+      #c {
+        width: 512px;
+        height: 512px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="c">
+      <svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#fff2f6" />
+            <stop offset="1" stop-color="#fde3ea" />
+          </linearGradient>
+          <radialGradient id="glassP" cx="0.36" cy="0.30" r="0.75">
+            <stop offset="0" stop-color="#ffd7e2" />
+            <stop offset="0.45" stop-color="#f28ba8" />
+            <stop offset="1" stop-color="#e0648a" />
+          </radialGradient>
+          <radialGradient id="glassM" cx="0.36" cy="0.30" r="0.8">
+            <stop offset="0" stop-color="#c7f0e5" />
+            <stop offset="0.5" stop-color="#5fc7ad" />
+            <stop offset="1" stop-color="#3fae94" />
+          </radialGradient>
+          <radialGradient id="glassY" cx="0.36" cy="0.30" r="0.8">
+            <stop offset="0" stop-color="#ffe9bd" />
+            <stop offset="0.5" stop-color="#f5c451" />
+            <stop offset="1" stop-color="#e0a92f" />
+          </radialGradient>
+          <radialGradient id="glassB" cx="0.36" cy="0.30" r="0.8">
+            <stop offset="0" stop-color="#d4ecfa" />
+            <stop offset="0.5" stop-color="#7cc0e8" />
+            <stop offset="1" stop-color="#549fce" />
+          </radialGradient>
+          <radialGradient id="glassU" cx="0.36" cy="0.30" r="0.8">
+            <stop offset="0" stop-color="#e6dbf6" />
+            <stop offset="0.5" stop-color="#b79ae0" />
+            <stop offset="1" stop-color="#9878c9" />
+          </radialGradient>
+        </defs>
+
+        <rect width="512" height="512" fill="url(#bg)" />
+
+        <!-- bead cluster, scaled up to fill the frame; big bead + heart stays in the
+       central ~80% (maskable safe) -->
+        <g transform="translate(256 268) scale(1.28) translate(-256 -276)">
+          <!-- back small beads -->
+          <circle cx="172" cy="192" r="54" fill="url(#glassY)" />
+          <circle cx="158" cy="177" r="15" fill="#ffffff" opacity="0.55" />
+
+          <circle cx="340" cy="192" r="54" fill="url(#glassB)" />
+          <circle cx="326" cy="177" r="15" fill="#ffffff" opacity="0.55" />
+
+          <circle cx="146" cy="322" r="60" fill="url(#glassU)" />
+          <circle cx="130" cy="305" r="17" fill="#ffffff" opacity="0.55" />
+
+          <circle cx="366" cy="322" r="60" fill="url(#glassM)" />
+          <circle cx="350" cy="305" r="17" fill="#ffffff" opacity="0.55" />
+
+          <!-- front big pink bead -->
+          <circle cx="256" cy="272" r="108" fill="url(#glassP)" />
+          <ellipse cx="220" cy="230" rx="36" ry="25" fill="#ffffff" opacity="0.65" />
+          <!-- heart on the big bead -->
+          <path
+            d="M256 322
+             c -44 -32 -70 -53 -70 -85
+             a 32 32 0 0 1 70 -19
+             a 32 32 0 0 1 70 19
+             c 0 32 -26 53 -70 85 z"
+            fill="#ffffff"
+            opacity="0.95"
+          />
+        </g>
+      </svg>
+    </div>
+  </body>
+</html>

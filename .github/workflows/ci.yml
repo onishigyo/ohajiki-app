@@ -1,0 +1,40 @@
+name: CI
+
+# PR と main への push で lint / format / build(tsc -b + vite) / test を自動実行し、
+# ロジック層の自動テストを機械的に強制する（土台の enforce 化）。
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # pnpm のバージョンは package.json の "packageManager" を使う
+      # （Cloudflare のビルドと揃える）。
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install (frozen lockfile)
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Format check
+        run: pnpm format:check
+
+      - name: Build (tsc -b + vite build)
+        run: pnpm build
+
+      - name: Test
+        run: pnpm test
