@@ -49,6 +49,13 @@
           <div class="beads-row" id="beadsRow"></div>
         </div>
 
+        <!-- 今日の内訳への導線。記録がある日だけ出す（カード自体のタップでも開く）-->
+        <button class="detail-btn" id="detailBtn" hidden>
+          <span class="detail-btn-icon">📋</span>
+          <span>きょう やったこと を みる</span>
+          <span class="detail-btn-arrow">›</span>
+        </button>
+
         <!-- やること -->
         <div class="sec-title"><span class="dot"></span>今日 何を がんばった？</div>
         <div class="actions" id="actionsGrid"></div>

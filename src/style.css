@@ -92,11 +92,12 @@ body {
 .today-more {
   display: none;
   margin-left: 5px;
-  font-size: 17px;
+  font-size: 15px;
   line-height: 1;
   font-weight: 900;
   color: var(--pink);
   vertical-align: -1px;
+  opacity: 0.8;
 }
 .today-card.is-tappable {
   cursor: pointer;
@@ -148,6 +149,51 @@ body {
   justify-content: flex-start;
   gap: 4px;
   pointer-events: none;
+}
+
+/* 今日の内訳への導線。カードは見た目が静的で押せると気づけないので、
+   子どもが既に「押せる」と知っている行ボタンの形で出す。記録がある日だけ表示。 */
+.detail-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: -8px 0 4px;
+  padding: 11px 14px;
+  border: none;
+  border-radius: 14px;
+  background: var(--card);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  cursor: pointer;
+  transition:
+    transform 0.1s,
+    box-shadow 0.1s;
+}
+.detail-btn[hidden] {
+  display: none;
+}
+.detail-btn:active {
+  transform: scale(0.98);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+.detail-btn-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+.detail-btn-arrow {
+  margin-left: auto;
+  font-size: 18px;
+  font-weight: 900;
+  color: var(--pink);
+}
+@media (prefers-reduced-motion: reduce) {
+  .detail-btn:active {
+    transform: none;
+  }
 }
 
 /* ===== 見出し ===== */

@@ -157,6 +157,7 @@ function renderChild(): void {
   card.setAttribute("role", total > 0 ? "button" : "presentation");
   if (total > 0) card.setAttribute("aria-label", "きょう やったことを 見る");
   else card.removeAttribute("aria-label");
+  el("detailBtn").hidden = total === 0;
 
   const grid = el("actionsGrid");
   grid.innerHTML = "";
@@ -860,6 +861,7 @@ function wireStaticEvents(): void {
   el("todayCard").addEventListener("click", () => {
     if (el("todayCard").classList.contains("is-tappable")) openTodayDetail();
   });
+  el("detailBtn").addEventListener("click", openTodayDetail);
   el("detailClose").addEventListener("click", closeTodayDetail);
 
   el("actionsGrid").addEventListener("click", (ev) => {

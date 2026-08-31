@@ -142,9 +142,15 @@ describe("main.ts の初期化（スモーク）", () => {
       elm?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
 
     const card = document.getElementById("todayCard")!;
+    const btn = document.getElementById("detailBtn") as HTMLElement;
     expect(card.classList.contains("is-tappable")).toBe(true);
+    expect(btn.hidden).toBe(false); // 記録がある日は導線ボタンが出る
 
-    click(card);
+    click(btn);
+    expect(document.getElementById("detailOverlay")?.classList.contains("show")).toBe(true);
+    click(document.getElementById("detailClose"));
+
+    click(card); // カード自体のタップでも開く
     const ov = document.getElementById("detailOverlay")!;
     expect(ov.classList.contains("show")).toBe(true);
 
@@ -171,6 +177,7 @@ describe("main.ts の初期化（スモーク）", () => {
     await new Promise((r) => setTimeout(r, 0));
     const card = document.getElementById("todayCard")!;
     expect(card.classList.contains("is-tappable")).toBe(false);
+    expect((document.getElementById("detailBtn") as HTMLElement).hidden).toBe(true);
     card.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     expect(document.getElementById("detailOverlay")?.classList.contains("show")).toBe(false);
   });
