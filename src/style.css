@@ -87,10 +87,9 @@ body {
   font-weight: 500;
   margin-bottom: 4px;
 }
-/* タップで今日の内訳が開くことの手がかり。記録が0件の日は押せないので出さない。
-   文字を足すと画面がうるさくなるので、ラベル末尾の小さなシェブロンだけにする。 */
+/* カードをタップしても今日の内訳が開く（主な導線は下の .detail-btn）。
+   ラベル末尾の小さなシェブロンは、その控えめな手がかり。 */
 .today-more {
-  display: none;
   margin-left: 5px;
   font-size: 15px;
   line-height: 1;
@@ -99,18 +98,15 @@ body {
   vertical-align: -1px;
   opacity: 0.8;
 }
-.today-card.is-tappable {
+.today-card {
   cursor: pointer;
   transition: transform 0.1s;
 }
-.today-card.is-tappable .today-more {
-  display: inline;
-}
-.today-card.is-tappable:active {
+.today-card:active {
   transform: scale(0.985);
 }
 @media (prefers-reduced-motion: reduce) {
-  .today-card.is-tappable:active {
+  .today-card:active {
     transform: none;
   }
 }

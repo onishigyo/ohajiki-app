@@ -143,8 +143,7 @@ describe("main.ts の初期化（スモーク）", () => {
 
     const card = document.getElementById("todayCard")!;
     const btn = document.getElementById("detailBtn") as HTMLElement;
-    expect(card.classList.contains("is-tappable")).toBe(true);
-    expect(btn.hidden).toBe(false); // 記録がある日は導線ボタンが出る
+    expect(btn.hidden).toBe(false);
 
     click(btn);
     expect(document.getElementById("detailOverlay")?.classList.contains("show")).toBe(true);
@@ -172,14 +171,18 @@ describe("main.ts の初期化（スモーク）", () => {
     expect(ov.classList.contains("show")).toBe(false);
   });
 
-  it("記録が0件の日は残高カードを押しても内訳が開かない", async () => {
+  it("記録が0件の日も内訳は開けて、空状態が出る", async () => {
     await import("./main.ts");
     await new Promise((r) => setTimeout(r, 0));
-    const card = document.getElementById("todayCard")!;
-    expect(card.classList.contains("is-tappable")).toBe(false);
-    expect((document.getElementById("detailBtn") as HTMLElement).hidden).toBe(true);
-    card.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-    expect(document.getElementById("detailOverlay")?.classList.contains("show")).toBe(false);
+    const btn = document.getElementById("detailBtn") as HTMLElement;
+    expect(btn.hidden).toBe(false); // 0件でも導線は消さない（位置を動かさない）
+
+    btn.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    const ov = document.getElementById("detailOverlay")!;
+    expect(ov.classList.contains("show")).toBe(true);
+    expect(ov.querySelectorAll(".log-item").length).toBe(0);
+    expect(document.getElementById("detailTotal")?.textContent).toBe("0");
+    expect(document.getElementById("detailList")?.textContent).toContain("まだ ないよ");
   });
 
   it("オーバーレイは外側タップで閉じ、シート本体タップでは閉じない（#8）", async () => {
