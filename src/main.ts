@@ -10,6 +10,7 @@ import {
   PIN_LENGTH,
   UNITS_MAX,
   addRule,
+  approvedEntriesForDate,
   approvedTotalForDate,
   backupFilename,
   backupText,
@@ -149,8 +150,8 @@ function renderChild(): void {
   }
   // 粒が数字より縦に長くなるぶんだけカードを伸ばす（少数のときは伸びない）。
   const beadRows = Math.ceil(beads / 10);
-  const card = document.querySelector<HTMLElement>(".today-card");
-  if (card) card.style.minHeight = `${38 + beadRows * 18 + 16}px`;
+  const card = el("todayCard");
+  card.style.minHeight = `${38 + beadRows * 18 + 16}px`;
 
   const grid = el("actionsGrid");
   grid.innerHTML = "";
@@ -168,6 +169,32 @@ function renderChild(): void {
   }
 
   renderChildHistory(); // 「これまで」タブの中身も最新に
+}
+
+// ---- 今日の内訳（残高カードをタップ）------------------------
+
+/** 今日つけた記録の一覧を出す。削除は親の操作なので 🗑 は出さない。 */
+function openTodayDetail(): void {
+  const items = approvedEntriesForDate(state.entries, todayKey());
+
+  el("detailTotal").textContent = String(totalReward(items));
+  el("detailList").innerHTML = items.length
+    ? items
+        .map((e) => {
+          const meta = e.units ? unitsLabel(e.units) : esc(e.time);
+          return `<div class="log-item">
+        <span class="log-emoji">${esc(e.emoji)}</span>
+        <div class="log-info"><div class="log-name">${esc(e.name)}</div><div class="log-time">${meta}</div></div>
+        <span class="log-reward">+${e.reward}こ</span>
+      </div>`;
+        })
+        .join("")
+    : `<div class="empty"><span class="big">🫙</span>きょうは まだ ないよ</div>`;
+  el("detailOverlay").classList.add("show");
+}
+
+function closeTodayDetail(): void {
+  el("detailOverlay").classList.remove("show");
 }
 
 // ---- タップで「＋◯こ」演出（#14 / #48）-------------------
@@ -818,11 +845,17 @@ function wireStaticEvents(): void {
     ["pinOverlay", closePin],
     ["parentOverlay", closeParent],
     ["askOverlay", () => closeAsk(false)],
+    ["detailOverlay", closeTodayDetail],
   ] as const) {
     el(id).addEventListener("click", (ev) => {
       if (ev.target === ev.currentTarget) close();
     });
   }
+
+  // 残高カードをタップ → 今日の内訳。粒は pointer-events:none なのでカードが受ける。
+  el("todayCard").addEventListener("click", openTodayDetail);
+  el("detailBtn").addEventListener("click", openTodayDetail);
+  el("detailClose").addEventListener("click", closeTodayDetail);
 
   el("actionsGrid").addEventListener("click", (ev) => {
     const btn = (ev.target as HTMLElement).closest<HTMLElement>("[data-rule-id]");

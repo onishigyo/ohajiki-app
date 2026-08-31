@@ -168,9 +168,14 @@ export function totalReward(entries: Entry[]): number {
   return entries.reduce((sum, e) => sum + e.reward, 0);
 }
 
+/** その日の「記録済み・未受領」の記録そのもの（つけた順のまま）。内訳表示用。 */
+export function approvedEntriesForDate(entries: Entry[], key: string): Entry[] {
+  return entriesByStatus(entriesForDate(entries, key), "approved");
+}
+
 /** その日の「まだ渡してない枚数」＝ status=approved の reward 合計（handed は含まない）。 */
 export function approvedTotalForDate(entries: Entry[], key: string): number {
-  return totalReward(entriesByStatus(entriesForDate(entries, key), "approved"));
+  return totalReward(approvedEntriesForDate(entries, key));
 }
 
 /** その日に「もらった数」＝ approved + handed の reward 合計（rejected は除外）。

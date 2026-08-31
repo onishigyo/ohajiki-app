@@ -91,6 +91,100 @@ describe("main.ts の初期化（スモーク）", () => {
     expect(raw.entries[0]).toMatchObject({ status: "approved", units: 3, reward: 6 });
   });
 
+  it("残高カードをタップすると今日の内訳が出る（削除ボタンは無い）", async () => {
+    const dk = (() => {
+      const d = new Date();
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+    })();
+    localStorage.setItem(
+      "ohajiki-state",
+      JSON.stringify({
+        entries: [
+          {
+            id: "a",
+            ruleId: "r1",
+            emoji: "📚",
+            name: "どくしょ",
+            reward: 6,
+            units: 3,
+            date: dk,
+            time: "17:00",
+            status: "approved",
+          },
+          {
+            id: "b",
+            ruleId: "r3",
+            emoji: "🦷",
+            name: "はみがき",
+            reward: 1,
+            date: dk,
+            time: "08:10",
+            status: "approved",
+          },
+          // 渡しずみ・別日は内訳に出さない
+          {
+            id: "c",
+            ruleId: "r2",
+            emoji: "🧹",
+            name: "そうじ",
+            reward: 9,
+            date: dk,
+            time: "12:00",
+            status: "handed",
+          },
+        ],
+        pin: "0000",
+      }),
+    );
+    await import("./main.ts");
+    await new Promise((r) => setTimeout(r, 0));
+    const click = (elm: Element | null | undefined) =>
+      elm?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+
+    const card = document.getElementById("todayCard")!;
+    const btn = document.getElementById("detailBtn") as HTMLElement;
+    expect(btn.hidden).toBe(false);
+
+    click(btn);
+    expect(document.getElementById("detailOverlay")?.classList.contains("show")).toBe(true);
+    click(document.getElementById("detailClose"));
+
+    click(card); // カード自体のタップでも開く
+    const ov = document.getElementById("detailOverlay")!;
+    expect(ov.classList.contains("show")).toBe(true);
+
+    // approved の2件だけ。合計は 6+1=7
+    const rows = ov.querySelectorAll(".log-item");
+    expect(rows.length).toBe(2);
+    expect(document.getElementById("detailTotal")?.textContent).toBe("7");
+    expect([...rows].map((r) => r.querySelector(".log-name")?.textContent)).toEqual([
+      "どくしょ",
+      "はみがき",
+    ]);
+    // timed は「◯回ぶん（◯分）」、fixed は時刻
+    expect(rows[0].querySelector(".log-time")?.textContent).toBe("3回ぶん（45分）");
+    expect(rows[1].querySelector(".log-time")?.textContent).toBe("08:10");
+    // 子ども画面なので削除ボタンは出さない
+    expect(ov.querySelectorAll(".log-del").length).toBe(0);
+
+    click(document.getElementById("detailClose"));
+    expect(ov.classList.contains("show")).toBe(false);
+  });
+
+  it("記録が0件の日も内訳は開けて、空状態が出る", async () => {
+    await import("./main.ts");
+    await new Promise((r) => setTimeout(r, 0));
+    const btn = document.getElementById("detailBtn") as HTMLElement;
+    expect(btn.hidden).toBe(false); // 0件でも導線は消さない（位置を動かさない）
+
+    btn.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    const ov = document.getElementById("detailOverlay")!;
+    expect(ov.classList.contains("show")).toBe(true);
+    expect(ov.querySelectorAll(".log-item").length).toBe(0);
+    expect(document.getElementById("detailTotal")?.textContent).toBe("0");
+    expect(document.getElementById("detailList")?.textContent).toContain("まだ ないよ");
+  });
+
   it("オーバーレイは外側タップで閉じ、シート本体タップでは閉じない（#8）", async () => {
     await import("./main.ts");
     await new Promise((r) => setTimeout(r, 0));

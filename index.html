@@ -39,8 +39,8 @@
       <!-- 今日 -->
       <div id="childToday">
         <!-- 今日の残高カード -->
-        <div class="today-card">
-          <div class="today-label">今日 もらえる おはじき</div>
+        <div class="today-card" id="todayCard">
+          <div class="today-label">今日 もらえる おはじき<span class="today-more">›</span></div>
           <div class="today-count">
             <span class="num" id="todayNum">0</span>
             <span class="unit">こ</span>
@@ -48,6 +48,14 @@
           <div class="today-sub" id="todaySub"></div>
           <div class="beads-row" id="beadsRow"></div>
         </div>
+
+        <!-- 今日の内訳への導線。0件の日も出す（位置が動かないほうが見つけやすい）。
+             カード自体のタップでも開く。 -->
+        <button class="detail-btn" id="detailBtn">
+          <span class="detail-btn-icon">📋</span>
+          <span>きょう やったこと を みる</span>
+          <span class="detail-btn-arrow">›</span>
+        </button>
 
         <!-- やること -->
         <div class="sec-title"><span class="dot"></span>今日 何を がんばった？</div>
@@ -97,6 +105,20 @@
             <button class="btn btn-ghost" id="timedCancel">やめる</button>
             <button class="btn btn-primary" id="timedSubmit">できた！</button>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 子ども:今日の内訳（残高カードをタップ）-->
+    <div class="overlay" id="detailOverlay">
+      <div class="sheet">
+        <div class="detail-head">
+          <span>きょう やったこと</span>
+          <span class="detail-total"><b id="detailTotal">0</b>こ</span>
+        </div>
+        <div id="detailList"></div>
+        <div class="btn-row">
+          <button class="btn btn-ghost" id="detailClose">とじる</button>
         </div>
       </div>
     </div>

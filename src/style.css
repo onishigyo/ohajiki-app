@@ -87,6 +87,29 @@ body {
   font-weight: 500;
   margin-bottom: 4px;
 }
+/* カードをタップしても今日の内訳が開く（主な導線は下の .detail-btn）。
+   ラベル末尾の小さなシェブロンは、その控えめな手がかり。 */
+.today-more {
+  margin-left: 5px;
+  font-size: 15px;
+  line-height: 1;
+  font-weight: 900;
+  color: var(--pink);
+  vertical-align: -1px;
+  opacity: 0.8;
+}
+.today-card {
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+.today-card:active {
+  transform: scale(0.985);
+}
+@media (prefers-reduced-motion: reduce) {
+  .today-card:active {
+    transform: none;
+  }
+}
 .today-count {
   display: flex;
   align-items: baseline;
@@ -122,6 +145,51 @@ body {
   justify-content: flex-start;
   gap: 4px;
   pointer-events: none;
+}
+
+/* 今日の内訳への導線。カードは見た目が静的で押せると気づけないので、
+   子どもが既に「押せる」と知っている行ボタンの形で出す。記録がある日だけ表示。 */
+.detail-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: -8px 0 4px;
+  padding: 11px 14px;
+  border: none;
+  border-radius: 14px;
+  background: var(--card);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  cursor: pointer;
+  transition:
+    transform 0.1s,
+    box-shadow 0.1s;
+}
+.detail-btn[hidden] {
+  display: none;
+}
+.detail-btn:active {
+  transform: scale(0.98);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+.detail-btn-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+.detail-btn-arrow {
+  margin-left: auto;
+  font-size: 18px;
+  font-weight: 900;
+  color: var(--pink);
+}
+@media (prefers-reduced-motion: reduce) {
+  .detail-btn:active {
+    transform: none;
+  }
 }
 
 /* ===== 見出し ===== */
@@ -1085,4 +1153,32 @@ body {
   .celebrate-burst {
     display: none;
   }
+}
+
+/* ===== 今日の内訳モーダル（子ども・残高カードをタップ）===== */
+.detail-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 16px;
+  font-weight: 900;
+  color: var(--ink);
+  margin-bottom: 14px;
+}
+.detail-total {
+  font-size: 15px;
+  color: var(--ink-soft);
+  font-weight: 700;
+}
+.detail-total b {
+  font-size: 24px;
+  font-weight: 900;
+  color: var(--pink);
+}
+#detailList {
+  max-height: 46vh;
+  overflow-y: auto;
+  margin: 0 -4px 4px;
+  padding: 0 4px;
 }
