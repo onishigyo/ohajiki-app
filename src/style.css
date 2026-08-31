@@ -87,6 +87,32 @@ body {
   font-weight: 500;
   margin-bottom: 4px;
 }
+/* タップで今日の内訳が開くことの手がかり。記録が0件の日は押せないので出さない。
+   文字を足すと画面がうるさくなるので、ラベル末尾の小さなシェブロンだけにする。 */
+.today-more {
+  display: none;
+  margin-left: 5px;
+  font-size: 17px;
+  line-height: 1;
+  font-weight: 900;
+  color: var(--pink);
+  vertical-align: -1px;
+}
+.today-card.is-tappable {
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+.today-card.is-tappable .today-more {
+  display: inline;
+}
+.today-card.is-tappable:active {
+  transform: scale(0.985);
+}
+@media (prefers-reduced-motion: reduce) {
+  .today-card.is-tappable:active {
+    transform: none;
+  }
+}
 .today-count {
   display: flex;
   align-items: baseline;
@@ -1085,4 +1111,32 @@ body {
   .celebrate-burst {
     display: none;
   }
+}
+
+/* ===== 今日の内訳モーダル（子ども・残高カードをタップ）===== */
+.detail-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 16px;
+  font-weight: 900;
+  color: var(--ink);
+  margin-bottom: 14px;
+}
+.detail-total {
+  font-size: 15px;
+  color: var(--ink-soft);
+  font-weight: 700;
+}
+.detail-total b {
+  font-size: 24px;
+  font-weight: 900;
+  color: var(--pink);
+}
+#detailList {
+  max-height: 46vh;
+  overflow-y: auto;
+  margin: 0 -4px 4px;
+  padding: 0 4px;
 }

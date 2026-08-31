@@ -39,8 +39,8 @@
       <!-- 今日 -->
       <div id="childToday">
         <!-- 今日の残高カード -->
-        <div class="today-card">
-          <div class="today-label">今日 もらえる おはじき</div>
+        <div class="today-card" id="todayCard">
+          <div class="today-label">今日 もらえる おはじき<span class="today-more">›</span></div>
           <div class="today-count">
             <span class="num" id="todayNum">0</span>
             <span class="unit">こ</span>
@@ -97,6 +97,20 @@
             <button class="btn btn-ghost" id="timedCancel">やめる</button>
             <button class="btn btn-primary" id="timedSubmit">できた！</button>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 子ども:今日の内訳（残高カードをタップ）-->
+    <div class="overlay" id="detailOverlay">
+      <div class="sheet">
+        <div class="detail-head">
+          <span>きょう やったこと</span>
+          <span class="detail-total"><b id="detailTotal">0</b>こ</span>
+        </div>
+        <div id="detailList"></div>
+        <div class="btn-row">
+          <button class="btn btn-ghost" id="detailClose">とじる</button>
         </div>
       </div>
     </div>

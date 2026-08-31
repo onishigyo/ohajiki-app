@@ -4,6 +4,7 @@ import {
   DEFAULT_MASCOT,
   UNITS_MAX,
   addRule,
+  approvedEntriesForDate,
   approvedTotalForDate,
   backupFilename,
   backupText,
@@ -212,6 +213,18 @@ describe("集計", () => {
         "2026-08-26",
       ),
     ).toBe(9);
+  });
+  it("approvedEntriesForDate はその日の approved を つけた順で返す", () => {
+    const list = approvedEntriesForDate(entries, "2026-08-27");
+    expect(list.map((e) => e.id)).toEqual(["a", "b"]); // d(rejected) と別日は除く
+    expect(approvedEntriesForDate(entries, "2026-08-25")).toEqual([]);
+  });
+  it("approvedEntriesForDate は handed を含めない（渡したぶんは今日の内訳から外れる）", () => {
+    const list = [
+      entry({ id: "a", date: "2026-08-27", status: "approved", reward: 2 }),
+      entry({ id: "h", date: "2026-08-27", status: "handed", reward: 3 }),
+    ];
+    expect(approvedEntriesForDate(list, "2026-08-27").map((e) => e.id)).toEqual(["a"]);
   });
   it("earnedTotalForDate は approved + handed（rejected 除外）", () => {
     const list = [
